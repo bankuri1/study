@@ -6,7 +6,7 @@ void My_Printf(const char *str, ...)
 	va_list arg;
 	char c;
 	va_start(arg, str);
-	while (c = *str++)
+	while (c = *str++)//不断接收字符
 	{
 		switch (c)
 		{
@@ -34,3 +34,4 @@ int main()
 	system("pause");
 	return 0;
 }
+//用可变参数列表实现printf()函数
