@@ -1,0 +1,25 @@
+#include<stdio.h>
+#include<stdlib.h>
+void reverse(char *start,char*end)
+{
+	if (*end != *start)
+	{
+		end--;
+		printf("%c", *end);
+		reverse(start, end);
+	}
+}
+int main()
+{
+	char array[] = "abcde";
+	char *p = array;
+	char *q = array;
+	while (*p != '\0')
+	{
+		p++;
+	}
+	reverse(q, p);
+	system("pause");
+	return 0;
+
+}
