@@ -1,0 +1,36 @@
+#include<stdlib.h>
+#include<stdio.h>
+#include<stdarg.h>
+void My_Printf(const char *str, ...)
+{
+	va_list arg;
+	char c;
+	va_start(arg, str);
+	while (c = *str++)
+	{
+		switch (c)
+		{
+		case ('s'):
+		{
+			 char *p = va_arg(arg, char *);
+			 fputs(p, stdout); 
+			 break;
+		}
+		case('c'):
+		{
+
+			char *q = va_arg(arg, char *);
+			fputs(q, stdout);
+			break;
+
+	    }
+	}	
+	}
+	va_end(arg);
+}
+int main()
+{
+	My_Printf("sccc", "hello", "b", "i", "t");
+	system("pause");
+	return 0;
+}
