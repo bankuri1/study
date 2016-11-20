@@ -1,0 +1,330 @@
+1、strcpy函数的实现
+#define _CRT_SECURE_NO_WARNINGS 1
+#include<stdio.h>
+#include<stdlib.h>
+#include<assert.h>
+#include<string.h>
+char *My_strcpy(char *dst, const char *str)
+{ 	
+	assert(dst);
+	assert(str);
+	while (*dst++ = *str++);
+	return dst;
+}
+int main()
+{
+	char *src = "ABCDE";
+	char dest[]="12345";
+	My_strcpy(dest, src);
+	printf("%s", dest);
+	system("pause");
+	return 0;
+
+}
+
+
+2、strncpy函数的实现
+#define _CRT_SECURE_NO_WARNINGS 1
+#include<stdio.h>
+#include<stdlib.h>
+#include<assert.h>
+#include<string.h>
+char *My_strncpy(char *dst, const char *str, size_t count)
+{ 
+	assert(dst);
+	assert(str);
+	assert(count > 0);
+	while (count--)
+	{
+		*dst++ = *str++;
+	}
+	*dst = '\0';
+	return dst;
+}
+int main()
+{
+	char *src = "ABCDEGFYTRHUUUUUU";
+	char dest[64];
+	int len = strlen(src);
+	int num = 0;
+	scanf("%d", &num);
+	if (num < len)
+	{
+		My_strncpy(dest, src, num);
+		printf("%s", dest);
+	}
+	else
+	{
+		printf("输入错误");
+	}
+	system("pause");
+	return 0;
+}
+
+
+3、strcat函数的实现
+#define _CRT_SECURE_NO_WARNINGS 1
+#include<stdio.h>
+#include<stdlib.h>
+#include<assert.h>
+#include<string.h>
+char *My_strcat(char *dst, const char *str)
+{
+	assert(dst);
+	assert(str);
+	int len1 = strlen(dst);
+	int len2 = strlen(str);
+	char *Buff = NULL;
+	char *end = NULL;
+	Buff = (char *)malloc(len1 + len2+1);
+	strcpy(Buff, dst);
+	end = Buff + len1;
+	strcpy(end, str);
+	printf("%s", Buff);
+	return dst;
+}
+
+int main()
+{
+	char *src = "ABCDEFGGGGGGG";
+	char dest[] = "12345";
+	My_strcat(dest, src);
+	system("pause");
+	return 0;
+
+}
+
+
+4、strncat函数的实现
+
+#define _CRT_SECURE_NO_WARNINGS 1
+#include<stdio.h>
+#include<stdlib.h>
+#include<assert.h>
+#include<string.h>
+char *My_strncat(char *dst, const char *str, size_t count)
+{
+	int len1 = strlen(dst);
+	int len2 = strlen(str);
+	char *Buff = NULL;
+	char *end = NULL;
+	Buff = (char *)malloc(len1 + len2+1);
+	strcpy(Buff, dst);
+	end = Buff + len1;
+	while (count--)
+	{
+		*end++ = *str++;
+	}
+	*end = '\0';
+	printf("%s", Buff);
+}
+int main()
+{
+	char *src = "ABCDEFGHIGK";
+	char dst[] = "123456789";
+	int num = 0;
+	scanf("%d", &num);
+	My_strncat(dst, src, num);
+	system("pause");
+	return 0;
+
+}
+
+
+5、strcmpt函数的实现
+int My_strcmp(const char *str1, const char *str2)
+{
+	assert(str1);
+	assert(str2);
+	while (*str1 != '\0', *str2 != '\0')
+	{
+		if (*str1 == *str2)
+		{
+			str1++;
+			str2++;
+		}
+		if (*str1 > *str2)
+		{
+			return 1;
+		}
+		if (*str1 < *str2)
+		{
+			return -1;
+		}
+	}
+	if (*str1 == '\0'&&*str2 != '\0')
+	{
+		return -1;
+	}
+	if (*str2 == '\0'&&*str1 != '\0')
+	{
+		return -1;
+	}
+	return 0;
+}
+int main()
+{
+	char *str1 = "ABCDEFGH";
+	char *str2 = "ABCDEFGH";
+	if (My_strcmp(str1, str2) == 0)
+	{
+		printf("两个字符串相等");
+	}
+	if (My_strcmp(str1, str2) == 1)
+	{
+		printf("字符串1大于字符串2");
+	}
+	if (My_strcmp(str1, str2) ==-1)
+	{
+		printf("字符串1小于字符串2");
+	}
+	system("pause");
+	return 0;
+}
+
+
+6、strncmp函数的实现
+#define _CRT_SECURE_NO_WARNINGS 1
+#include<stdio.h>
+#include<stdlib.h>
+#include<assert.h>
+#include<string.h>
+int My_strncmp(const char *str1, const char *str2, size_t count)
+{
+	assert(str1);
+	assert(str2);
+	while (count--)
+	{
+		if (*str1 != '\0'&&*str2 != '\0')
+		{
+			if (*str1 > *str2)
+			{
+				return 1;
+			}
+			if (*str1 <*str2)
+			{
+				return -1;
+			}
+			if (*str1 == *str2)
+			{
+				str1++;
+				str2++;
+			}
+
+		}
+		if (*str1 == '\0'&&*str2 != '\0')
+		{
+			return -1;
+		}
+		if (*str2 == '\0'&&*str1 != '\0')
+		{
+			return -1;
+		}
+	}
+}
+
+
+int main()
+{
+	char *str1 = "ABCDEFGH";
+	char *str2 = "ABCDEWGH";
+	int num = 0;
+	scanf("%d", &num);
+	if (My_strncmp(str1, str2, num) == 0)
+	{
+		printf("两个字符串相等");
+	}
+	if (My_strncmp(str1, str2, num) == 1)
+	{
+		printf("字符串1大于字符串2");
+	}
+	if (My_strncmp(str1, str2, num) == -1)
+	{
+		printf("字符串1小于字符串2");
+	}
+	system("pause");
+	return 0;
+}
+
+
+7、memcpy函数的实现：复制后会覆盖部分原有数据
+#define _CRT_SECURE_NO_WARNINGS 1
+#include<stdio.h>
+#include<stdlib.h>
+#include<assert.h>
+#include<string.h>
+void *memcpy(void *dst, const void *str, size_t count)
+{   
+	assert(dst);
+	assert(str);
+	void *ret = dst;
+	while (count--)
+	{
+		*(char*)dst = *(char*)str;
+		dst=(char*)dst+1;
+		str=(char*)str + 1;
+
+	}
+	return dst;
+}
+int main()
+{
+	char *src = "ABCDE";
+	char dest[] ="BBBBBBBBBB";
+	int num = 0;
+	scanf("%d", &num);
+	memcpy(dest, src, num);
+	printf("%s", dest);
+	system("pause");
+	return 0;
+}
+
+
+8、memmove函数的实现
+#define _CRT_SECURE_NO_WARNINGS 1
+#include<stdio.h>
+#include<stdlib.h>
+#include<assert.h>
+#include<string.h>
+void *My_memmove(void *dst, const void *str, size_t count)
+{
+	assert(str);
+	void *ret = dst;
+	if (dst <= str || (char*)dst >= ((char*)str + count))
+	{
+		while (count--)
+		{
+			assert(dst);
+			*(char*)dst = *(char *)str;
+			dst = (char*)dst + 1;
+			str = (char *)str + 1;
+
+		}
+
+	}
+	else
+	{
+		(char*)dst = (char*)dst + count - 1;
+		(char *)str = (char *)str + count - 1;
+		while (count--)
+		{
+			*(char*)dst = *(char *)str;
+			dst = (char*)dst - 1;
+			str = (char *)str - 1;
+
+		}
+
+	}
+	return ret;
+}
+int main()
+{
+	char *src = "AABCDE";
+	char dst[] = "AAAAABBBB";
+	My_memmove(dst, src, strlen(src) + 1);
+	printf("%s", src);
+	system("pause");
+	return 0;
+}
+
+
