@@ -1,0 +1,49 @@
+#define _CRT_SECURE_NO_WARNINGS 1
+#include<stdio.h>
+#include<stdlib.h>
+int recursive(int num, int count)
+{
+	static int result = 1;
+	result = result*num;
+	if (--count!= 0)
+	{
+		recursive(num, count);
+	}
+	return result;
+}
+int main()
+{
+	int number = 0;
+	int time = 0;
+	scanf("%d%d", &number, &time);
+	/*recursive(number, time);*/
+	printf("%d",recursive(number, time));
+	system("pause");
+	return 0;
+}
+
+ 
+#define _CRT_SECURE_NO_WARNINGS 1
+#include<stdio.h>
+#include<stdlib.h>
+int recursive(int num)
+{    
+	static int b = 0;
+	static int a = 0;
+	a = num % 10;
+	b = b + a;
+	num = num / 10;
+	if (num != 0)
+	{
+		recursive(num);
+	}
+	return b;
+}
+int main()
+{
+	int number = 0;
+	scanf("%d", &number);
+	printf("%d",recursive(number));
+	system("pause");
+	return 0;
+}
