@@ -87,7 +87,11 @@ int  Delete_linkman(struct contact *p, int d_number, int len)
 	int i = 0;
 	for (i = d_number - 1; i < len - 1; i++)
 	{
-		p[i] = p[i + 1];
+		p[i] = p[i + 1];//删除就是覆盖前一个元素但要注意在删除之后要让结构体数组长度要进行减一操作
+		               //在覆盖的时候由于p[i]代表的是第几个结构体因此在进行\
+		                 赋值操作时一定要注意左值是可修改的这种访问形式类似于\
+		                 数组中把a[1]=a[2]而不能直接让a作为左值只能在初始化的时候将整个数组赋值\
+		                 并且这个结构体中的name之类的成员又是一个数组所以也不让p[i].name作为左值赋值
 
 	}
 }
@@ -142,15 +146,16 @@ int cmp(const void *a, const void *b)
 {
 
 	struct contact *aa = (struct contact *)a;
-	struct contact *bb = (struct contact *)b;
-	if (aa->name != bb->name)
+	struct contact *bb = (struct contact *)b;  //强制类型转换成指向结构体的指针
+	if (aa->name != bb->name)                 //通过结构体指针访问结构体成员
 		return(strcmp((aa->name), (bb->name)));
 
 }
 void sort(struct contact *p, int len)
 {
 	assert(p);
-	qsort(p, len, sizeof(struct contact), cmp);
+	qsort(p, len, sizeof(struct contact), cmp);//sizeof(struct contact)一个结构体的字节数相当于数组中元素类型的大小
+
 
 }
 test.c文件：
@@ -160,7 +165,8 @@ int main()
 	int num = 0;
 	struct contact student[N];
 	int len = 0;
-	int flag = 0;//定义一个标志位来结构体数组中每个结构体的位置
+	int flag = 0;////定义一个标志位移动所指向结构体的位置和指针访问\
+	               的形式一样结构体指针也是指针遵循指针变量的规则
 	int total = N;
 	int delete_number = 0;
 	meau();
@@ -183,7 +189,8 @@ int main()
 					   printf("请输入要删除的第i个学生的信息:");
 					   scanf("%d", &delete_number);
 					   Delete_linkman(student, delete_number, len+flag);
-					   flag = flag - 1;
+					   flag = flag - 1;   //删除就是覆盖前一个元素但要注意\
+					                      在删除之后要让结构体数组长度要进行减一操作
 			}break;
 
 			case 3:{
