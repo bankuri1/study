@@ -1,0 +1,42 @@
+#define _CRT_SECURE_NO_WARNINGS 1
+#include<stdio.h>
+#include<stdlib.h>
+void swap(int *x, int *y)
+{
+	int temp;
+	temp= *y;
+	*y = *x;
+	*x = temp;
+}
+void CHANGE(int arr[], int len)
+{
+	int i = 0;
+	for (i = 0; i < len; i++)
+	{
+		int minpos = i;
+		int j = i;
+		for (j = i; j < len; j++)
+		{
+			if (arr[j]<arr[minpos])
+			{
+				minpos = j;
+			}
+		}
+		swap(&arr[i], &arr[minpos]);//这种方式由于没有对i=minpos的情况进行判断所以如果交换的话可能交换的是同一个值所以你如果直接使用异或的方式进行交换就会出粗，因为你传参传的是同一个地址一异或就直接将两个数变为0了
+		                            //所以你如果要采用异或的方式交换的话必须要排除i==j的情况
+	}
+}
+int main()
+{
+	int i = 0;
+	int arr[] = { 12, 23, 88,11,55,0};
+	int len = sizeof(arr) / sizeof(arr[0]);
+	CHANGE(arr, len);
+	for (i = 0; i < len; i++)
+	{
+		printf("%d", arr[i]);
+		printf(" "); 
+	}
+	system("pause");
+	return 0;
+}
