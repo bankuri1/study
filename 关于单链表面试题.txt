@@ -1,0 +1,357 @@
+int CheckCross(pNode pHead1, pNode pHead2)//判断两个单链表是否相交
+{
+     if (NULL == pHead1 || NULL == pHead2)
+     {
+          return -1;
+     }
+     pNode Cur1 = pHead1;
+     pNode Cur2 = pHead2;
+     while (Cur1->next)
+     {
+          Cur1 = Cur1->next;
+     }
+     while (Cur2->next)
+     {
+          Cur2 = Cur2->next;
+     }
+     if (Cur1 == Cur2)
+     {
+          return 1;
+     }
+     else
+     {
+          return 0;
+     }
+}
+
+
+
+
+pNode Reverse(pNode *pHead)
+{
+     pNode Temp = *pHead;
+     pNode Cur = Temp->next;
+     pNode pNext = Cur->next;
+     if (NULL == Cur)
+     {
+          return NULL;
+     }
+     else if (NULL == Cur->next)
+     {
+          return *pHead;
+     }
+     else
+     {
+          Temp->next = NULL;
+          while (Cur!=NULL&&Cur->next!=NULL)
+          {
+               Cur->next = Temp;
+               Temp = Cur;
+               Cur = pNext;
+               pNext = pNext->next;
+          }
+          Cur->next = Temp;
+          Temp = Cur;
+          (*pHead) = Temp;
+          return *pHead;
+     }    
+}
+
+
+
+
+
+pNode ReturnKNode(pNode pHead, size_t k)
+{
+     assert(k > 0);
+     if (NULL==pHead||k<1)
+     {
+          return NULL;
+     }
+     pNode pFast = pHead;
+     pNode pSlow = pHead;
+     while (k--)
+     {
+          pFast = pFast->next;
+     }
+     while (pFast->next)
+     {
+          pSlow = pSlow->next;
+          pFast = pFast->next;
+     }
+     return pSlow;
+}
+
+
+
+
+pNode FindMiddleNode(pNode pHead)//分奇数个结点还是偶数个节点
+{
+     if (pHead == NULL)
+     {
+          return NULL;
+     }
+     int count = Size(pHead);
+     pNode pFast = pHead;
+     pNode pSlow = pHead;
+     if ((count & 1) == 1)//说明有奇数个结点
+     {
+          while (pFast->next)
+          {
+               pSlow = pSlow->next;
+               pFast = pFast->next->next;
+          }
+          return pSlow;
+     }
+     else
+     {
+          pNode pPre = NULL;
+          while (pFast!=NULL&&pFast!=NULL)
+          {
+               pPre = pSlow;
+               pSlow = pSlow->next;
+               pFast = pFast->next->next;
+          }
+          return pPre;
+     }
+}
+
+
+
+
+
+pNode mergeList(pNode *pHead1, pNode* pHead2)//合并两个有序链表
+{
+     if (*pHead1 == NULL&&*pHead2 != NULL)
+     {
+          return *pHead2;
+     }
+     else if (*pHead1 != NULL&&*pHead2 == NULL)
+     {
+          return *pHead2;
+     }
+     else
+     {
+          pNode pNewNode= NULL;
+          if ((*pHead1)->data > (*pHead2)->data)
+          {
+               pNewNode = *pHead2;
+               (*pHead2) = (*pHead2)->next;
+          }
+          else if ((*pHead1) ->data<(*pHead2)->data)
+          {
+               pNewNode = *pHead1;
+               (*pHead1) = (*pHead1)->next;
+          }
+          pNode Tail = pNewNode;
+          while ((*pHead1)!= NULL&&(*pHead2)!= NULL)
+          {
+               if ((*pHead1)->data<(*pHead2)->data)
+               {
+                    Tail->next = *pHead1;
+                    (*pHead1) = (*pHead1)->next;//要移动否则在下面比较的时候又从头开始
+               }
+               else
+               {
+                    Tail->next = *pHead2;
+                    (*pHead2) = (*pHead2)->next;
+                   
+               }
+               Tail = Tail->next;
+              
+          }
+          if (*pHead1 == NULL && (*pHead2) != NULL)
+          {
+               Tail->next = (*pHead2);
+          }
+          else if (*pHead1 != NULL && (*pHead2) == NULL)
+          {
+               Tail->next = (*pHead1);
+          }
+          (*pHead1) = pNewNode;
+     }
+     return *pHead1;
+}
+
+
+
+
+pNode IsMeetCircle(pNode pHead)
+{
+     if (pHead == NULL)
+     {
+          return NULL;
+     }
+     pNode pSlow = pHead;
+     pNode pFast = pHead;
+     while (pFast != NULL)
+     {
+          if (pFast->next != NULL)
+          {
+               pSlow = pSlow->next;
+               pFast = pFast->next->next;
+          }
+          if (pFast == pSlow)//快慢指针相遇则带环
+          {
+               return pSlow;
+          }
+     }
+     return NULL;
+}
+int Circle_length(pNode pHead)
+{
+     pNode Temp = IsMeetCircle(pHead);
+     pNode pCur = Temp->next;
+     int count = 1;
+     while (pCur!= Temp)
+     {
+          ++count;
+          pCur = pCur->next;
+     }
+     return count;
+}
+
+
+
+
+
+
+
+
+
+pNode GetCircleEntryNode(pNode pHead, pNode pMeet)
+{
+     pNode pFast = pMeet;
+     pNode pSlow = pHead;
+     while (pFast != pSlow)
+     {
+          pFast = pFast->next;
+          pSlow = pSlow->next;
+     }
+     return pSlow;
+}
+
+
+关于链表的相交问题
+ 
+1、不带环的两个单链表：
+
+
+如果两个不带环的单链表相交则他们的尾结点一定相同，所以可以用两个指针分别指向链表的头结点然后到最后一个尾结点停下来进行比较看尾结点是否相同，相同则说明两个单链表相交
+
+int CheckCross(pNode pHead1, pNode pHead2)//判断两个单链表是否相交
+{
+     if (NULL == pHead1 || NULL == pHead2)
+     {
+          return -1;
+     }
+     pNode Cur1 = pHead1;
+     pNode Cur2 = pHead2;
+     while (Cur1->next)
+     {
+          Cur1 = Cur1->next;
+     }
+     while (Cur2->next)
+     {
+          Cur2 = Cur2->next;
+     }
+     if (Cur1 == Cur2)
+     {
+          return 1;
+     }
+     else
+     {
+          return 0;
+     }
+}
+
+链表带环的情况：
+后两种情况是两个链表都带环，第一种则是只有一个链表带还（这种情况根本不可能相交）
+如果两个链表都带环这种情况又分为在环外相交和在环内相交（在环内相交整个环都是交点这种情况就先不处理了）
+但是我们知道在环外相交这种情况是无法根据判断尾结点这种方式来判断的因为带环的你根本无法去找到它的尾结点
+那么我们是可以通过解环之后把它当作两个不带环的单链表相交来处理，之后再还原这个环即可
+
+如果两个都带环在环外相交
+方法一：先将将链表1环入口点的前一个节点找到，然后保存链表1环的入口点，然后让链表1环的入口点的前一个结点指向链表2 的头节点，此时再求环的入口点即为两个带环链表的交点，然后再恢复链表让之前链表1环的入口点的前一个结点的next再指向之前保存环的入口点
+
+pNode CheckCircleCross(pNode pHead1, pNode pHead2)//两个链表都带环->变形成一个普通的带环链表求入口点即交点
+{
+        pNode meet1 = NULL ;
+        pNode meet2 = NULL ;
+        pNode pPreEntry = NULL ;
+        pNode Temp = NULL ;
+        pNode ret = NULL ;
+       meet1 = GetMeetCircle( pHead1);
+       meet2 = GetMeetCircle( pHead2);
+       pPreEntry = pPreCircleEntryNode(pHead1 ,meet1);
+       Temp = pPreEntry->next; //保存环的入口点
+       pPreEntry->next = pHead2;
+       meet1 = GetMeetCircle( pHead1);
+       ret = GetCircleEntryNode( pHead1, meet1);//交点
+       pPreEntry->next = Temp;
+        return ret;
+}
+
+方法二：找到链表1(或者2）的环的入口点的前一个结点让并且先将环的入口点保存，然后将的入口点的前一个结点的next置空，然后将他转换成求两个不带环单链表的交点。那么问题就转换成如何求两个不带环单链表的交点。
+要走差值步则是k--
+差值减一步则是--k
+pNode _CheckNoCircleCross(pNode pHead1, pNode pHead2 )//找到两个不带环单链表的交点
+{
+        int length1 = Size(pHead1 );
+        int length2 = Size(pHead2 );
+        int len = length1 - length2;
+        pNode pCur1 = pHead1 ;
+        pNode pCur2 = pHead2 ;
+        if (len>0)
+       {
+              while (len--)
+             {
+                    pCur1 = pCur1->next;
+             }
+       }
+        if (len<0)
+       {
+             len = -len;
+              while (len--)
+             {
+                    pCur2 = pCur2->next;
+             }
+       }
+        while (pCur1 != NULL &&pCur2!=NULL)
+       {
+              if (pCur1 == pCur2)
+             {
+                     return pCur1;
+             }
+             pCur1 = pCur1->next;
+             pCur2 = pCur2->next;
+       }
+        return NULL ;
+}
+
+
+pNode CheckCircleCross(pNode pHead1, pNode pHead2)//转换成两个不带环链表的相交问题
+{
+        pNode meet1 = NULL ;
+        pNode meet2 = NULL ;
+        pNode pPreEntry = NULL ;
+        pNode Temp = NULL ;
+        pNode ret = NULL ;
+       meet1 = GetMeetCircle( pHead1);
+       meet2 = GetMeetCircle( pHead2);
+       pPreEntry = pPreCircleEntryNode( pHead1, meet1);
+       Temp = pPreEntry->next; //保存环的入口点
+       pPreEntry->next = NULL;//解环变成两个普通链表相交
+       ret = _CheckNoCircleCross( pHead1, pHead2);//判断两个不带环单链表是否相交
+       pPreEntry->next = Temp;
+        return ret;
+
+}
+
+因此在判断两个单链表是否相交的时候我们一定要分情况：
+
+
+
+
+
+
