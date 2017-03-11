@@ -1,0 +1,230 @@
+#include<iostream>
+#include<stdio.h>
+#include<assert.h>
+using namespace std;
+template<typename T>
+class Vector
+{
+public:
+	typedef T ValueType;
+	typedef ValueType* Pointer;
+	typedef const ValueType* ConstPointer;
+	typedef ValueType* Iterator;
+	typedef const ValueType* ConstIterator;
+	typedef ValueType& Reference;
+	typedef const ValueType& ConstReference;
+	typedef size_t SizeType;
+	Vector()
+		:_start(0)
+		, _end(0)
+		, _endOfStorage(0)
+		, _size(0)
+		, _capacity(0)
+	{
+
+	}
+	Vector(SizeType n, const T& value)
+	{
+		FillAndInit(n, value);
+	}
+	Vector(SizeType n)
+	{
+		FillAndInit(n, T());
+	}
+	Vector(const Vector<T>& v)
+	{
+		_start = new T[v.Capacity()];
+		_end = _start + v.Size();
+		for (int index = 0; index < v.Size(); ++index)
+		{
+			_start[index] = v[index];
+		}
+	}
+	Vector<T>& operator=(const Vector<T>& v)
+	{
+		if (_start != v._start)
+		{
+			Iterator Temp = new T[v.Capacity()];
+			for (int index = 0; index < Size(); ++index)
+			{
+				Temp[index] = v[index];
+			}
+			delete _start[];
+			_start = Temp;
+		}
+	}
+	~Vector()
+	{
+		if (_start != NULL)
+		{
+			delete [] _start;
+		}
+	}
+	SizeType Capacity()const
+	{
+		return _capacity;
+	}
+	SizeType Size()const
+	{
+		return _size;
+	}
+	SizeType MaxSize()const
+	{
+		return SizeType(-1) / sizeof(T);
+	}
+	bool Empty()const
+	{
+		return 0 == Size();
+	}
+	Reference operator[](size_t index)
+	{
+		assert(index < Size());
+		return _start[index];
+	}
+	ConstReference operator[](size_t index)const
+	{
+		return _start[index];
+	}
+	Reference Front()
+	{
+		return *(Begin());
+	}
+	ConstReference Front()const
+	{
+		return *(Begin());
+	}
+	Reference Back()
+	{
+		return *(End()-1);
+	}
+	ConstReference Back()const
+	{
+		return *(End() - 1);
+	}
+	Iterator Begin()
+	{
+		return _start;
+	}
+	ConstIterator Begin()const
+	{
+		return _start;
+	}
+	Iterator End()
+	{
+		return _end;
+	}
+	ConstIterator End()const
+	{
+		return _end;
+	}
+	Iterator Insert(Iterator position, const T& data)
+	{
+
+		CheckCapacity();
+		int index = position - Begin();
+		int end = Size() - 1;
+		while (index <= end)
+		{
+			_start[end + 1] = _start[end];
+			--end;
+		}
+		_start[index] = data;
+		++_size;
+		++_end;
+		return position;
+	}
+	Iterator Erase(Iterator position)
+	{
+		int index = position - Begin();
+		int end = Size() - 1;
+		while (index <end)
+		{
+			_start[index] = _start[index+1];
+			index++;
+		}
+		--_size;
+		--_end;
+		return position;
+	}
+	void Display();
+	void PushBack(const T& value);
+	void PopBack();
+protected:
+	void FillAndInit(SizeType n, const T& value)
+	{
+		_start = new T[n];
+		for (int index = 0; index < n; ++index)
+		{
+			_start[index] = value;
+		}
+		_size = n;
+		_capacity = n;
+		_end += n;
+		_endOfStorage += n;
+
+	}
+	void CheckCapacity();
+protected:
+	Iterator _start;
+	Iterator _end;
+	Iterator _endOfStorage;
+	int _size;
+	int _capacity;
+};
+template<typename T>
+void Vector<T>:: Display()
+{
+	for (int index = 0; index < Size(); ++index)
+	{
+		cout << _start[index] << endl;
+	}
+}
+template<typename T>
+void Vector<T>::CheckCapacity()
+{
+	if (_size >= _capacity)
+	{
+		Iterator Temp = new T[_capacity * 2+3];//如果构造函数中Capacity==0不加一个常数会出错
+		for (int index = 0; index < Size(); ++index)
+		{
+			Temp[index] = _start[index];
+		}
+		delete[] _start;
+		_start = Temp;
+		_capacity =_capacity*2+3;
+	}
+}
+template<typename T>
+void Vector<T>::PushBack(const T& value)
+{
+	CheckCapacity();
+	_start[Size()] = value;
+	++_size;
+	_end = _start + Size();
+	_endOfStorage = _start + Capacity();
+}
+template<typename T>
+void Vector<T>::PopBack()
+{
+	--_size;
+	--_end;
+}
+int main()
+{
+	Vector<int> d;
+    d.Display();
+	d.PushBack(1);
+	d.PushBack(2);
+	d.PushBack(3);
+	d.PushBack(4);
+	d.PushBack(5);
+	int *temp = d.Begin() + 2;
+	d.Insert(temp, 6);
+	//d.PopBack();
+	d.Display();
+	d.Erase(temp);
+	d.Display();
+	cout << d.MaxSize() << endl;
+	system("pause");
+	return 0;
+}
