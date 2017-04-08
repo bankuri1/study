@@ -1,0 +1,559 @@
+#include<iostream>
+#include<stdlib.h>
+using namespace std;
+//class Base
+//{
+//public:
+//	virtual void  FunTest()
+//	{
+//		cout << "FunTest1()" << endl;
+//	}
+//public:int _b;
+//};
+//class Derived :public Base
+//{
+//	 virtual void FunTest()
+//	{
+//		cout << "FunTest2()" << endl;
+//	}
+//public:int _d;
+//};
+//void FunTest3(Base&b)
+//{
+//	b.FunTest();
+//}
+//int main()
+//{
+//	Base b;
+//	Derived d;
+//	FunTest3(b);
+//	FunTest3(d);
+//	system("pause");
+//	return 0;
+//}
+//class Base
+//{
+//public:
+//	void virtual FunTest1(int i)
+//	{
+//		cout << "Base::FunTest1" << endl;
+//	}
+//	void FunTest2(int i)
+//	{
+//		{
+//			cout << "Base:: FunTest2" << endl;
+//		}
+//	}
+//	virtual Base& FunTest3(Base &p)
+//	{
+//		{
+//			cout << "Base:: FunTest3" << endl;
+//		}
+//		return p;
+//	}
+//	virtual void FunTest4(int i,int j)
+//	{
+//		{
+//			cout << "Base:: FunTest4" << endl;
+//		}
+//	}
+//};
+//class Derived :public Base
+//{
+//public:
+//	void virtual FunTest1(int i)
+//	{
+//		cout << "Derived:: FunTest1" << endl;
+//	}
+//	virtual void FunTest2(int i)
+//	{
+//		{
+//			cout << "Derived:: FunTest2" << endl;
+//		}
+//	}
+//	virtual Derived& FunTest3(Derived&p)
+//	{
+//		{
+//			cout << "Derived::FunTest3" << endl;
+//		}
+//	  return p;
+//	}
+//   virtual void FunTest4(int i)
+//   {
+//	   {
+//		   cout << "Derived::FunTest4" << endl;
+//	   }
+//   }
+//};
+//void FunTest(Base *b)
+//{
+//	Base a;
+//	Base &p = a;
+//	b->FunTest1(0);
+//	b->FunTest2(0);
+//	b->FunTest3(a);
+//	b->FunTest4(0, 0);
+//}
+//int main()
+//{
+//	Base b;
+//	Derived d;
+//	Base*pb = &b;
+//	FunTest(pb);
+//	pb = &d;
+//	FunTest(pb);
+//	system("pause");
+//}
+//class Base
+//{
+//public:virtual void Display();
+//};
+//class Derived:public Base
+//{
+//public:int _d;
+//};
+//virtual void Base::Display()
+//{
+//	int i = 0;
+//}
+//int main()
+//{
+//	Derived *d;
+//	system("pause");
+//	return 0;
+//
+//class Base
+//{
+//public:
+//	virtual Base* pFunTest1()
+//	{
+//		cout << "Base::pFunTest1()" << endl;
+//		return this;
+//	}
+//
+//};
+//class Derived :public Base
+//{
+//	virtual Derived* pFunTest1()
+//	{
+//		cout << "Derived::pFunTest1()" << endl;
+//		return this;
+//	}
+//};
+//void pFunTest(Base*p)
+//{
+//	p->pFunTest1();
+//}
+//int main()
+//{
+//	Base b;
+//	pFunTest(&b);
+//	Derived d;
+//	pFunTest(&d);
+//	system("pause");
+//	return 0;
+//}
+//class Base
+//{
+//public:
+//	Base()
+//	{
+//		cout << "Base()" << endl;
+//	}
+//	/*virtual*/~Base()
+//	{
+//		cout << "~Base()" << endl;
+//	}
+//};
+//class Derived:public Base
+//{
+//public:
+//	Derived()
+//	{
+//		cout << "Derived()" << endl;
+//	}
+//	/*virtual */~Derived()
+//	{
+//		cout << "~Derived()" << endl;
+//	}
+//};
+//int main()
+//{
+//	Base *pb = new Derived;
+//	delete pb;
+//	system("pause");
+//	return 0;
+//}
+//*********************************
+class Base
+{
+public:
+	virtual void FunTest1()
+{
+		int _a=1;
+		cout << "FunTest1" << endl;
+}
+	virtual void FunTest2()
+	{
+		int _b=2;
+		cout << "FunTest2" << endl;
+	}
+	virtual void FunTest3()
+	{
+		int _c=3;
+		cout << "FunTest3" << endl;
+	}
+public:int _b;
+};
+typedef void(*Fun)();
+int main()
+{
+	int a = 0;
+	int p = *(&a) + 1;
+	cout << &a << endl;
+	cout << &p << endl;
+	cout << p << endl;
+	Base b;
+	b._b = 10;
+	Fun _pFun;
+	Fun *pFun;
+	cout << typeid(_pFun).name()<<endl;
+	cout << typeid(pFun).name()<<endl;
+	pFun= (Fun*)(*((int*)&b));
+	//(*pFun)();
+	_pFun = (Fun)(*((int*)*((int*)&b)+1));
+	_pFun();
+	_pFun= (Fun)(*((int *)((*(int *)&b)) + 2));
+	_pFun();
+	while (*pFun)
+	{
+		(*pFun)();
+		//pFun = (Fun*)((int*)pFun++);
+		pFun++;
+	}
+	//cout << sizeof(b) << endl;
+	system("pause");
+	return 0;
+}
+//class Base
+//{
+//public:
+//	virtual void FunTest1()
+//	{
+//		cout << "FunTest1" << endl;
+//	}
+//	virtual void FunTest2()
+//	{
+//		cout << "FunTest2" << endl;
+//	}
+//	virtual void FunTest3()
+//	{
+//		cout << "FunTest3" << endl;
+//	}
+//public:int _b;
+//};
+//int main()
+//{
+//	Base b;
+//	b._b = 10;
+//	cout << sizeof(b) << endl;
+//	system("pause");
+//	return 0;
+//}
+//单继承的派生类的重写
+//class Base
+//{
+//public:
+//	virtual void FunTest1()
+//	{
+//		cout << "Base::FunTest1" << endl;
+//	}
+//	virtual void FunTest2()
+//	{
+//		cout << "Base::FunTest2" << endl;
+//	}
+//	virtual void FunTest3()
+//	{
+//		cout << "Base::FunTest3" << endl;
+//	}
+//public:int _b;
+//};
+//class Derived :public Base
+//{
+//public:virtual void FunTest1()
+//	{
+//		cout << "Derived::FunTest1" << endl;
+//	}
+//	virtual void FunTest2()
+//	{
+//		cout << "Derived::FunTest2" << endl;
+//	}
+//	virtual void FunTest3()
+//	{
+//		cout << "Derived::FunTest3" << endl;
+//	}
+//	int _d;
+//};
+//typedef void(*Fun)();
+//int main()
+//{
+//	Base b;
+//	b._b = 10;
+//	Fun *pFun1 = (Fun*)(*((int*)&b));
+//	while (*pFun1)
+//	{
+//		(*pFun1)();
+//		pFun1 = (Fun*)((int*)pFun1++);
+//	}
+//	Derived d;
+//	d._b = 10;
+//	d._d = 11;
+//	Fun *pFun2 = (Fun*)(*((int *)&d));
+//	while (*pFun2)
+//	{
+//		(*pFun2)();
+//		pFun2 = (Fun*)((int*)pFun2++);
+//	}
+//	cout << sizeof(d) << endl;
+//	system("pause");
+//	return 0;
+//}
+//多继承派生类的重写
+//class Base1
+//{
+//public:
+//
+//	virtual void FunTest1()
+//	{
+//		cout << "Base1::FunTest1()" << endl;
+//	}
+//	virtual void FunTest2()
+//	{
+//		cout << "Base1::FunTest2()" << endl;
+//	}
+//	void FunTest3()
+//	{
+//		cout << "Base1::FunTest3()" << endl;
+//	}
+//	int _b1;
+//};
+//class Base2
+//{
+//public:
+//
+//	virtual void FunTest4()
+//	{
+//		cout << "Base2::FunTest4()" << endl;
+//	}
+//	virtual void FunTest5()
+//	{
+//		cout << "Base2::FunTest5()" << endl;
+//	}
+//	void FunTest6()
+//	{
+//		cout << "Base2::FunTest6()" << endl;
+//	}
+//	int _b2;
+//};
+//class Derived:public Base1,public Base2
+//{
+//public:
+//	virtual void FunTest1()
+//	{
+//		cout << "Derived::FunTest1()" << endl;
+//	}
+//	virtual void FunTest2()
+//	{
+//		cout << "Derived::FunTest2()" << endl;
+//	}
+//	virtual void FunTest3()
+//	{
+//		cout << "Derived::FunTest3()" << endl;
+//	}
+//	virtual void FunTest4()
+//	{
+//		cout << "Derived::FunTest4()" << endl;
+//	}
+//	virtual void FunTest5()
+//	{
+//		cout << "Derived::FunTest5()" << endl;
+//	}
+//	virtual void FunTest6()
+//	{
+//		cout << "Derived::FunTest6()" << endl;
+//	}
+//	int _d;
+//};
+//typedef void(*Fun)();
+//int main()
+//{
+//	Base1 b1;
+//	b1._b1 = 10;
+//	Fun*pFun1 = (Fun*)(*((int *)&b1));
+//	while (*pFun1)
+//	{
+//		(*pFun1)();
+//		pFun1 = (Fun*)((int*)pFun1++);
+//	}
+//	Base2 b2;
+//	b2._b2 = 10;
+//	Fun*pFun2 = (Fun*)(*((int *)&b2));
+//	while (*pFun2)
+//	{
+//		(*pFun2)();
+//		pFun2 = (Fun*)((int*)pFun2++);
+//	}
+//	Derived  d;
+//	d._b1 = 10;
+//	d._b2= 11;
+//	d._d = 13;
+//	Fun*pFun3 = (Fun*)(*((int *)&d));
+//	while (*pFun3)
+//	{
+//		(*pFun3)();
+//		pFun3 = (Fun*)((int*)pFun3++);
+//	}
+//	int *Temp =(int*) &d;
+//	Temp += 2;
+//	Fun*pFun4 = (Fun*)(*Temp);
+//	while (*pFun4)
+//	{
+//		(*pFun4)();
+//		pFun4 = (Fun*)((int*)pFun4++);
+//	}
+//	cout << sizeof(d) << endl;
+//	system("pause");
+//	return 0;
+//}
+//class B
+//{
+//public:
+//	virtual void FunTest1()
+//	{
+//		cout << "B::FunTest1()" << endl;
+//	}
+//	int _b;
+//};
+//class C1 :public B
+//{
+//public:
+//	virtual void FunTest1()
+//	{
+//		cout << "C1::FunTest1()" << endl;
+//	}
+//	virtual void FunTest2()
+//	{
+//		cout << "C1::FunTest2()" << endl;
+//	}
+//	int _c1;
+//};
+//class C2 :public B
+//{  
+//public:
+//	virtual void FunTest1()
+//	{
+//		cout << "C2::FunTest1()" << endl;
+//	}
+//	virtual void FunTest3()
+//	{
+//		cout << "C2::FunTest3()" << endl;
+//	}
+//	int _c2;
+//};
+//class D :public C1, public C2
+//{
+//public:
+//	virtual void FunTest1()
+//	{
+//		cout << "D::FunTest1()" << endl;
+//	}
+//	virtual void FunTest2()
+//	{
+//		cout << "D::FunTest2()" << endl;
+//	}
+//	virtual void FunTest3()
+//	{
+//		cout << "D::FunTest3()" << endl;
+//	}
+//	virtual void FunTest()
+//	{
+//		cout << "D::FunTest4()" << endl;
+//	}
+//	int _d;
+//};
+//typedef void(*Fun)();
+//int main()
+//{
+//
+//     D d;
+//	 d._c1 = 10;
+//	 d._c2 = 11;
+//	 d._d = 13;
+//	 Fun*pFun1 = (Fun*)(*((int*)&d));
+//	 while (*pFun1)
+//	 {
+//		 (*pFun1)();
+//		 pFun1 = (Fun*)((int*)pFun1++);
+//	 }
+//	int*Temp = (int*)&d;
+//	Temp += 3;
+//	Fun*pFun2 = (Fun*)(*Temp);
+//	while (*pFun2)
+//	{
+//		(*pFun2)(); 
+//		pFun2 = (Fun*)((int*)pFun2++);
+//
+//	}
+//	cout << sizeof(d)<< endl;
+//	system("pause");
+//	return 0;
+//}
+//虚拟继承
+//class B
+//{
+//public:
+//	virtual void FunTest1()
+//	{
+//		cout << "B::FunTest1()" << endl;
+//	}
+//	int _b;
+//};
+//class C1 :virtual public B
+//{
+//public:
+//	virtual void FunTest2()
+//	{
+//		cout << "C1::FunTest2()" << endl;
+//	}
+//	int _c1;
+//};
+//class C2 :virtual public B
+//{
+//public:
+//	virtual void FunTest3()
+//	{
+//		cout << "C2::FunTest3()" << endl;
+//	}
+//	int _c2;
+//};
+//class D :public C1, public C2
+//{
+//public:
+//	virtual void FunTest4()
+//	{
+//		cout << "D::FunTest4()" << endl;
+//	}
+//	int _d;
+//};
+//int main()
+//{
+//	D d;
+//	d._b = 10;
+//	d._c1 = 11;
+//	d._c2 = 12;
+//	d._d = 13;
+//	cout << d._b << endl;
+//	cout << sizeof(d) << endl;
+//	system("pause");
+//	return 0;
+//}
