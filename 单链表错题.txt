@@ -1,0 +1,202 @@
+单链表错题解析：
+
+1、单链表的逆置
+
+自己写的错误代码：
+pNode Reverse(pNode *pHead)
+{
+         if (*pHead == NULL || (* pHead)->pNext == NULL)
+        {
+                return *pHead ;
+        }
+         else
+        {
+                pNode Temp = *pHead ;
+                pNode pCur = Temp->pNext;
+                pNode Pnext = pCur->pNext;
+               Temp->pNext = NULL;
+                while (pCur != NULL &&pCur->pNext != NULL)
+               {
+                       pCur->pNext = Temp;
+                       Temp = pCur;
+                       pCur = Pnext;
+                       Pnext = Pnext->pNext;
+               }
+               * pHead = pCur;
+                return *pHead ;
+        }      
+}
+
+打印的不是 4 3 2 1 而是 4 
+因为只进行了数据的覆盖并没有将所以插入的数据连接起来真正将数据结点链接起来的其实是Temp，但是如果只将*pHead=Temp此时也是有问题的，因为最后一个尾结点的pCur->pNext是为空的，因此并没有对尾结点进行处理。
+
+正解：
+处理了最后一个尾结点：
+pNode Reverse(pNode *pHead)
+{
+         if (*pHead == NULL || (* pHead)->pNext == NULL)
+        {
+                return *pHead ;
+        }
+         else
+        {
+                pNode Temp = *pHead ;
+                pNode pCur = Temp->pNext;
+                pNode Pnext = pCur->pNext;
+               Temp->pNext = NULL;
+                while (pCur != NULL &&pCur->pNext != NULL)
+               {
+                       pCur->pNext = Temp;
+                       Temp = pCur;
+                       pCur = Pnext;
+                       Pnext = Pnext->pNext;
+               }
+               pCur->pNext = Temp;
+               * pHead = pCur;
+                return *pHead ;
+        }      
+}
+
+但是相对于上述方法创建的临时变量多，因此改进，下面这种思路更加清晰。既处理了尾结点也创建了较少的临时变量
+pNode* Reverse(pNode* pHead)
+{
+        assert(pHead);
+         if (*pHead == NULL || (*pHead)->pNext == NULL)
+        {
+                return *pHead;
+        }
+         else
+        {
+               pNode pPre = *pHead;
+               pNode pCur = *pHead;
+               pNode pNewNode = NULL;
+                while (pCur)
+               { 
+                       pCur = pCur->pNext;
+                       pPre->pNext = pNewNode;
+                       pNewNode = pPre;
+                       pPre = pCur;
+               }
+               *pHead = pNewNode;
+        }
+         return *pHead;
+}
+
+
+
+
+2、在删除倒数第k个节点的时候很容易出错：
+
+我们都知道要删除单链表的倒数第K个结点我们可以遍历一遍单链表找到这个结点在单链表中的那个 
+自己的错题：
+
+     pNode DeleteKNode(pNode *pHead, size_t k )
+{
+         assert(pHead );
+         assert(k < SizeNode(*pHead)); //判断是否超过了链表的总结点个数
+        
+         if ((*pHead ) == NULL)
+        {
+                return NULL ;
+        }
+         pNode pFast = *pHead ;
+         pNode pSlow = *pHead ;
+         while (pFast != NULL &&pFast->pNext != NULL)
+        {
+                while (--k ) ??????????会进入死循环，为什么在这个while(--k)中先对k进行--之后再判断，并且我的k是无符号整型，则会一直减下去形成死循环
+               {
+                       pFast = pFast->pNext;
+
+               }
+               pSlow = pSlow->pNext;
+        }
+        pSlow->value = pSlow->pNext->value;
+         pNode Temp = pSlow->pNext;
+        pSlow->pNext = pSlow->pNext->pNext;
+        free(Temp);
+         return *pHead ;
+}
+
+
+问题一：即使我将k的类型修改成int类型也不可以，因为==0之后下次继续进入循环一减减到-1再继续-2照样会陷入死循环，因此在进行循环嵌套的时候一定要注意
+
+问题二：而且我写的这个程序在删除结点的时候也存在问题，为什么？
+因为我使用的是交换值的方法来删除，如果删除的是尾结点呢？
+难道我要和空交换内容吗啊？明显不可以。那么在使用这种方式去删除结点的时候就要考虑是否删除的是尾结点，如果删除的是尾结点，那么就直接将尾结点删除。
+
+效率低：之所以采用交换值的方式去删除是为了不用去遍历2次单链表，因为我们知道单链表是不具有指向前一个节点的特性的，我们只能第一次完成之后将这个结点保存起来，然后第二次去遍历这个链表然后找到当前结点next如果等于这个结点，那么我们就可以直接让当前结点的next指向next的next
+那么为了解决效率低的问题我们可以采用如下两种方法：
+
+高效：就是刚才提到的使用值交换的方法（注意一定要考虑删除的是不是尾结点）这种在删除的倒数K个节点非常高效直接就删除了，不需要从头遍历一次单链表
+
+解决第一个问题，如何正确的找到倒数第K个结点
+先定义两个快慢指针然后让快指针先走K-1步
+然后快慢指针一起走，如果快指针的next为空则慢指针就指向了倒数的第K个结点
+pNode DeleteKNode(pNode *pHead, int k )
+{
+         assert(pHead );
+         assert(k < SizeNode(*pHead)); //判断是否超过了链表的总结点个数
+        
+         if ((*pHead ) == NULL)
+        {
+                return NULL ;
+        }
+         pNode pFast = *pHead ;
+         pNode pSlow = *pHead ;
+         while (pFast!=NULL &&pFast->pNext != NULL)
+        {
+                if (k >0)
+               {
+                       -- k;
+               }
+                if (k ==0)
+               {
+                       pSlow = pSlow->pNext;
+               }
+               pFast = pFast->pNext;
+        }
+}
+
+接着解决第二个问题：
+如果我们希望代码较少,我们就采用遍历链表的方式
+else   
+        {
+                pNode Cur = *pHead ;
+                if (pSlow == *pHead )
+               {
+                       free(pSlow);
+                       pSlow = NULL ;
+               }//这种遍历单链表要考虑删除的是头节点的情况
+                while (Cur->pNext != pSlow)
+               {
+                       Cur = Cur->pNext;
+               }
+               Cur->pNext = Cur->pNext->pNext;
+               free(pSlow);
+        }
+但如果我们想效率高不怕代码多则采用如下方式：
+         if (pSlow->pNext)
+        {
+               pSlow->value = pSlow->pNext->value;
+                pNode Temp = pSlow->pNext;
+               pSlow->pNext = pSlow->pNext->pNext;
+               free(Temp);
+               Temp = NULL ;
+        }
+         else   //这种遍历单链表要考虑删除的是头节点的情况
+        {
+                pNode Cur = *pHead ;
+                if (pSlow == *pHead )
+               {
+                       free(pSlow);
+                       pSlow = NULL ;
+               }//当然在有值交换的方式的前提下就不需要添加这句代码
+                while (Cur->pNext != pSlow)
+               {
+                       Cur = Cur->pNext;
+               }
+               Cur->pNext = Cur->pNext->pNext;
+               free(pSlow);
+        }
+
+
